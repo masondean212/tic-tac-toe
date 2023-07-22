@@ -1,11 +1,24 @@
+import { useState, useEffect } from "react"
+function ButtonHeader({ setPlayerCount, playerCount, isWin, setIsWin, currentPlayer, setCurrentPlayer }) {
 
-function ButtonHeader({ setPlayerCount , playerCount }) {
-    
-    return(
+    const [outputHeader, setOutputHeader] = useState([])
+
+    useEffect(() => {
+        if (isWin) {
+            setIsWin(false)
+            setOutputHeader([<div>Congrats {currentPlayer.toUpperCase()}!</div>, <div> Want To Play Again?</div>])
+        } else {
+            setOutputHeader(<div>Number of Players?</div>)
+        }
+        setCurrentPlayer("o");
+    }, [])
+
+
+    return (
         <div>
-            <div>Number of Players?</div>
-            <input type="button" value="1" onClick={() => setPlayerCount(1)}/>
-            <input type="button" value="2" onClick={() => setPlayerCount(2)}/>
+            {outputHeader}
+            <input type="button" value="1" onClick={() => setPlayerCount(1)} />
+            <input type="button" value="2" onClick={() => setPlayerCount(2)} />
         </div>
     )
 }
