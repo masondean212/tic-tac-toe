@@ -1,18 +1,30 @@
 import _ from "lodash"
 
-function CheckWin(piecePosition, player) {
+function CheckWin(piecePosition, currentPlayer) {
 
-    let gameState = ""
-    const gameStateArray =_.chain(piecePosition)
+    let gameState = "";
+    let checkPlayer = "";
+    switch (currentPlayer) {
+        case "x":
+            checkPlayer = "o";
+            break;
+        case "o":
+            checkPlayer = "x";
+            break;
+        default:
+            checkPlayer = "l";
+            break;
+    }
+    const gameStateArray = _.chain(piecePosition)
         .map(p => {
-            if (p === player) {
+            if (p === checkPlayer) {
                 return "w";
             } else {
                 return "l";
             }
         })
         .value()
-        _.each(gameStateArray,p => gameState += p)
+    _.each(gameStateArray, p => gameState += p)
     const didWin = (gameState.slice(0, 3) === "www"
         || gameState.slice(3, 6) === "www"
         || gameState.slice(6, 9) === "www"  //checks row victory

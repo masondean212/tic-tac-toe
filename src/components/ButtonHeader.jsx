@@ -1,19 +1,26 @@
 import { useState, useEffect } from "react"
-function ButtonHeader({ setPlayerCount, isWin, setIsWin, currentPlayer, setCurrentPlayer }) {
+function ButtonHeader({ setPlayerCount, isWin, setIsWin }) {
 
     const [outputHeader, setOutputHeader] = useState([])
 
     useEffect(() => {
-        if (isWin) {
-            setIsWin(false)
-            setOutputHeader([<div>Congrats {currentPlayer.toUpperCase()}!</div>, <div> Want To Play Again?</div>])
+        if (isWin.winState) {
+            switch(isWin.player) {
+                case "e":
+                    setOutputHeader([<div>It's a tie!</div>, <div> Want To Play Again?</div>])
+                    break;
+                default:
+                    setOutputHeader([<div>Congrats {isWin.player.toUpperCase()}!</div>, <div> Want To Play Again?</div>])
+                    break;
+            }
+            
         } else {
             setOutputHeader(<div>Number of Players?</div>)
         }
     }, [])
 
     function gameStart(numberOfPlayers) {
-        setCurrentPlayer("o");
+        setIsWin({winState: false, player: "e"});
         setPlayerCount(numberOfPlayers);
     }
     return (

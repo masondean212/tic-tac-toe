@@ -3,41 +3,34 @@ import { useState, useEffect } from "react";
 import imgO from "../assets/O.png";
 import imgX from "../assets/X.png";
 import CheckWin from "./CheckWin.jsx"
-function PlayGame({ isWin , setIsWin , currentPlayer , setCurrentPlayer }) {
+function PlayGame({ isWin, setIsWin }) {
     const [piecePosition, setPiecePosition] = useState(_.fill(Array(9), "e"))
     const [pieceImages, updatePieceImages] = useState([]);
-
+    const [currentPlayer, setCurrentPlayer] = useState("n");
     const elementSize = {
         width: 100,
         height: 100
     };
 
-    function switchPlayer(player) {
-        if (player === "o") {
-            player = "x";
+    function switchPlayer() {
+        if (currentPlayer === "o") {
+            setCurrentPlayer("x");
         } else {
-            player = "o";
+            setCurrentPlayer("o");
         }
-        setCurrentPlayer(player);
     }
-    function changeState(index) {
+
+    function nextGamePhase(index) {
         const placeHolderForPosition = _.map(piecePosition, (p, i) => {
             return ((index === i)
                 ? ((currentPlayer === "x") ? "x" : "o")
                 : p);
         });
-        
         setPiecePosition(placeHolderForPosition);
-        if (CheckWin(placeHolderForPosition, currentPlayer)) {
-            setIsWin(true);
-        } else if (_.some(placeHolderForPosition, p => p === "e")) {
-           switchPlayer(currentPlayer);
-        } else {
-            setCurrentPlayer("e");
-            setIsWin(true);
-        };
-        ;
     }
+
+
+
 
     function pickImage(item, index) {
         switch (item) {
@@ -48,15 +41,36 @@ function PlayGame({ isWin , setIsWin , currentPlayer , setCurrentPlayer }) {
             default:
                 return <button
                     style={elementSize}
-                    onClick={() => changeState(index)} />;
+                    onClick={() => nextGamePhase(index)} />;
         }
     }
+
     useEffect(() => {
         updatePieceImages(_.map(piecePosition, (p, i) => pickImage(p, i)));
+        console.log("I changed piece Image from:",  piecePosition)
     }
-        , [piecePosition])
-    useEffect(()=> {console.log("here",currentPlayer)},[currentPlayer])
-    
+
+        , [piecePosition]);
+
+    useEffect(() => {
+        console.log(currentPlayer);
+        if (CheckWin(piecePosition, currentPlayer)) {
+            console.log("WINNER!");
+            (currentPlayer === "x")
+            ? setIsWin({ winState: true, player: "o" })
+            : setIsWin({ winState: true, player: "x" });
+        } else if (_.some(piecePosition, p => p === "e")) {
+            switchPlayer(currentPlayer);
+        } else {
+            
+            setIsWin({ winState: true, player: "e" });
+        };
+        console.log("I got pieceposition:" , piecePosition,currentPlayer)
+    }, [pieceImages]);
+
+    useEffect(()=>console.log(isWin)
+    ,[currentPlayer]);
+
     return (
         <table>
             <tbody>

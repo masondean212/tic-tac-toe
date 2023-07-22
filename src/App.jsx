@@ -6,8 +6,7 @@ import PlayGame from "./components/PlayGame.jsx"
 function App() {
   const [playerCount, setPlayerCount] = useState(0);
   const [gameOutput, setGameOutput] = useState([]);
-  const [isWin, setIsWin] = useState(false);
-  const [currentPlayer, setCurrentPlayer] = useState("");
+  const [isWin, setIsWin] = useState({winState: false, player: "e"}); //using "e" to represent neither player
 
   useEffect(() => {
     console.log(playerCount);
@@ -17,37 +16,29 @@ function App() {
           setPlayerCount={setPlayerCount}
           playerCount={playerCount}
           isWin={isWin}
-          setIsWin={setIsWin}
-          currentPlayer={currentPlayer}
-          setCurrentPlayer={setCurrentPlayer} />])
+          setIsWin={setIsWin}/>])
         break;
       case (1):
         setGameOutput([<PlayGame
           isWin={isWin}
-          setIsWin={setIsWin}
-          currentPlayer={currentPlayer}
-          setCurrentPlayer={setCurrentPlayer} />])
+          setIsWin={setIsWin}/>])
         break;
       case (2):
         setGameOutput([<PlayGame
           isWin={isWin}
-          setIsWin={setIsWin}
-          currentPlayer={currentPlayer}
-          setCurrentPlayer={setCurrentPlayer} />])
+          setIsWin={setIsWin}/>])
         break;
       default:
         setGameOutput([<ButtonHeader
           setPlayerCount={setPlayerCount}
           playerCount={playerCount}
           isWin={isWin}
-          setIsWin={setIsWin}
-          currentPlayer={currentPlayer}
-          setCurrentPlayer={setCurrentPlayer} />])
+          setIsWin={setIsWin}/>])
         break;
     }
   }, [playerCount])
 
-  useEffect(() => { ((isWin) ? setPlayerCount(3) : null); console.log(currentPlayer) }, [isWin])
+  useEffect(() => { ((isWin.winState) ? setPlayerCount(3) : null);}, [isWin])
 
   return (
     <>
