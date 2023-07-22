@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-function ButtonHeader({ setPlayerCount, playerCount, isWin, setIsWin, currentPlayer, setCurrentPlayer }) {
+function ButtonHeader({ setPlayerCount, isWin, setIsWin, currentPlayer, setCurrentPlayer }) {
 
     const [outputHeader, setOutputHeader] = useState([])
 
@@ -10,15 +10,17 @@ function ButtonHeader({ setPlayerCount, playerCount, isWin, setIsWin, currentPla
         } else {
             setOutputHeader(<div>Number of Players?</div>)
         }
-        setCurrentPlayer("o");
     }, [])
 
-
+    function gameStart(numberOfPlayers) {
+        setCurrentPlayer("o");
+        setPlayerCount(numberOfPlayers);
+    }
     return (
         <div>
             {outputHeader}
-            <input type="button" value="1" onClick={() => setPlayerCount(1)} />
-            <input type="button" value="2" onClick={() => setPlayerCount(2)} />
+            <input type="button" value="1" onClick={() => gameStart(1)} />
+            <input type="button" value="2" onClick={() => gameStart(2)} />
         </div>
     )
 }

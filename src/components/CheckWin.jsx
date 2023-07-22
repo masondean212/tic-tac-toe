@@ -1,11 +1,11 @@
 import _ from "lodash"
 
-function CheckWin(piecePosition, currentPlayer) {
+function CheckWin(piecePosition, player) {
 
     let gameState = ""
     const gameStateArray =_.chain(piecePosition)
         .map(p => {
-            if (p === currentPlayer) {
+            if (p === player) {
                 return "w";
             } else {
                 return "l";
@@ -31,6 +31,7 @@ function CheckWin(piecePosition, currentPlayer) {
         || ((gameState[2] === "w")
             && (gameState[4] === "w")
             && (gameState[6] === "w"))) //checks up-diagnol
+
 
     return didWin;
 }

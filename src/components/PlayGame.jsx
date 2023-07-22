@@ -3,30 +3,40 @@ import { useState, useEffect } from "react";
 import imgO from "../assets/O.png";
 import imgX from "../assets/X.png";
 import CheckWin from "./CheckWin.jsx"
-function PlayGame({ isWin , setIsWin }) {
+function PlayGame({ isWin , setIsWin , currentPlayer , setCurrentPlayer }) {
     const [piecePosition, setPiecePosition] = useState(_.fill(Array(9), "e"))
     const [pieceImages, updatePieceImages] = useState([]);
-    const [currentPlayer, setCurrentPlayer] = useState("o")
-    
+
     const elementSize = {
         width: 100,
         height: 100
     };
 
+    function switchPlayer(player) {
+        if (player === "o") {
+            player = "x";
+        } else {
+            player = "o";
+        }
+        setCurrentPlayer(player);
+    }
     function changeState(index) {
         const placeHolderForPosition = _.map(piecePosition, (p, i) => {
             return ((index === i)
-                ? ((currentPlayer === "x") ? "x" : "o" )
-                : p)
-        })
+                ? ((currentPlayer === "x") ? "x" : "o")
+                : p);
+        });
+        
         setPiecePosition(placeHolderForPosition);
-        if (CheckWin(placeHolderForPosition,currentPlayer)) {
+        if (CheckWin(placeHolderForPosition, currentPlayer)) {
             setIsWin(true);
+        } else if (_.some(placeHolderForPosition, p => p === "e")) {
+           switchPlayer(currentPlayer);
         } else {
-        (currentPlayer === "o") 
-            ? setCurrentPlayer("x")
-            : setCurrentPlayer("o");
-        }
+            setCurrentPlayer("e");
+            setIsWin(true);
+        };
+        ;
     }
 
     function pickImage(item, index) {
@@ -38,13 +48,15 @@ function PlayGame({ isWin , setIsWin }) {
             default:
                 return <button
                     style={elementSize}
-                    onClick={()=>changeState(index)} />;
+                    onClick={() => changeState(index)} />;
         }
     }
     useEffect(() => {
         updatePieceImages(_.map(piecePosition, (p, i) => pickImage(p, i)));
     }
         , [piecePosition])
+    useEffect(()=> {console.log("here",currentPlayer)},[currentPlayer])
+    
     return (
         <table>
             <tbody>
